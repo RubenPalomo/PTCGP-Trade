@@ -17,7 +17,6 @@
 
   &_rarity-select {
     display: flex;
-    // justify-content: center;
     margin-top: 20px;
   }
 
@@ -41,13 +40,14 @@
     position: absolute;
     justify-content: center;
     align-items: center;
-    bottom: 30px;
+    bottom: 2vh;
     left: 0;
     width: 100%;
   }
 
   &_submit-button {
-    width: 500px;
+    width: 70vw;
+    max-width: 400px;
     margin: 10px;
   }
 }
