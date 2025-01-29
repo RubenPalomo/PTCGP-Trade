@@ -1,3 +1,8 @@
+import { Trade } from "./trade";
+
 export interface User {
-  username: string;
+  _id?: string;
+  userId: string;
+  trades: Trade[];
+  creationDate: Date;
 }

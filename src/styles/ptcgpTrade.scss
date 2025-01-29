@@ -8,6 +8,14 @@
     margin-top: 20px;
   }
 
+  &-subtitle {
+    width: 100%;
+    text-align: center;
+    font-size: 150%;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
   &_pokemon-card-container {
     display: flex;
     flex-direction: column;
@@ -54,5 +62,31 @@
   &-image {
     width: 100%;
     border-radius: 8px;
+  }
+}
+
+.result-popup {
+  display: flex;
+  flex-direction: column;
+
+  &--table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: "auto";
+    padding: 10px;
+  }
+
+  &_message {
+    font-size: 150%;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+
+    &--minus {
+      position: absolute;
+      bottom: 2px;
+      right: 20px;
+    }
   }
 }

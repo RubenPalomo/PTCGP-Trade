@@ -1,42 +1,56 @@
 "use client";
 
-import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { PokemonCard } from "@/models/pokemonCard";
-import { getData } from "@/api/callsToApi/callsToApi";
+import { getAllOffers, getData } from "@/api/callsToApi/callsToApi";
 import PokeCard from "../PokeCard/PokeCard";
 import SubmitButtons from "../SubmitButtons/SubmitButtons";
+import { Button } from "@mui/material";
+import { ResultPopup } from "../ResultPopup/ResultPopup";
+import { User } from "@/models/user";
 
-export default function PTCGPTrade() {
+export default function PTCGPWanted() {
   const [cards, setCards] = useState<PokemonCard[]>([]);
   const [rarities, setRarities] = useState<string[]>([]);
   const [selectedRarity, setSelectedRarity] = useState<string>("");
-  const [selectedCard, setSelectedCard] = useState<PokemonCard | null>(null);
-  const [selectedTradeCard, setSelectedTradeCard] =
+  const [selectedWantedCard, setSelectedWantedCard] =
     useState<PokemonCard | null>(null);
+  const [selectedOfferedCard, setSelectedOfferedCard] =
+    useState<PokemonCard | null>(null);
+  const [openResultPopup, setResultPopup] = useState<boolean>(false);
+  const [users, setUsers] = useState<User[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChangeRarity = (e: any) => {
     setSelectedRarity(e.target.value);
-    setSelectedCard(null);
-    setSelectedTradeCard(null);
+    setSelectedOfferedCard(null);
+    setSelectedWantedCard(null);
   };
 
-  const handleCardClick = (clickedCard: PokemonCard): void => {
-    if (selectedCard && selectedCard.id === clickedCard.id) {
-      setSelectedCard(null);
-      setSelectedTradeCard(null);
+  const handleWantedClick = (clickedCard: PokemonCard): void => {
+    if (selectedWantedCard && selectedWantedCard.id === clickedCard.id) {
+      setSelectedWantedCard(null);
+      setSelectedOfferedCard(null);
       setSelectedRarity("");
     } else {
-      setSelectedCard(clickedCard);
+      setSelectedWantedCard(clickedCard);
       setSelectedRarity(clickedCard.rarity);
     }
   };
 
-  const handleTradeClick = (clickedCard: PokemonCard): void => {
-    if (selectedTradeCard && selectedTradeCard.id === clickedCard.id)
-      setSelectedTradeCard(null);
-    else setSelectedTradeCard(clickedCard);
+  const handleOfferClick = (clickedCard: PokemonCard): void => {
+    if (selectedOfferedCard && selectedOfferedCard.id === clickedCard.id)
+      setSelectedOfferedCard(null);
+    else setSelectedOfferedCard(clickedCard);
+  };
+
+  const handleGetAllOffers = async () => {
+    if (selectedWantedCard) {
+      const users = await getAllOffers(selectedWantedCard);
+
+      if (users) setUsers(users);
+      setResultPopup(true);
+    }
   };
 
   useEffect(() => {
@@ -58,7 +72,7 @@ export default function PTCGPTrade() {
 
   return (
     <div>
-      <h1 className="ptcgp-trade-title">Pokemon TCG Pocket Cards Trade</h1>
+      <h1 className="ptcgp-trade-title">Pokemon TCG Pocket Cards Wanted</h1>
       <div className="ptcgp-trade_pokemon-card-container">
         <div>
           <label htmlFor="rarity-select">Filter by rarity: </label>
@@ -76,45 +90,59 @@ export default function PTCGPTrade() {
             ))}
           </select>
         </div>
+        {!(selectedWantedCard && selectedOfferedCard) && (
+          <p className="ptcgp-trade-subtitle">
+            {selectedWantedCard
+              ? "Select a card to offer"
+              : "Select the card you want"}
+          </p>
+        )}
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div className="ptcgp-trade_card-container">
-            {selectedCard ? (
-              <PokeCard
-                key={selectedCard.id}
-                card={selectedCard}
-                handleCardClick={handleCardClick}
-              />
+            {selectedWantedCard ? (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <PokeCard
+                  key={selectedWantedCard.id}
+                  card={selectedWantedCard}
+                  handleCardClick={handleWantedClick}
+                />
+                {!selectedOfferedCard && (
+                  <Button variant="contained" onClick={handleGetAllOffers}>
+                    See all offers
+                  </Button>
+                )}
+              </div>
             ) : (
               filteredCards.map((card: PokemonCard) => (
                 <PokeCard
                   key={card.id}
                   card={card}
-                  handleCardClick={handleCardClick}
+                  handleCardClick={handleWantedClick}
                 />
               ))
             )}
           </div>
           <div
             style={{
-              display: selectedCard ? "block" : "none",
+              display: selectedWantedCard ? "block" : "none",
               width: "100%",
             }}
           >
             <div className="ptcgp-trade_card-container">
-              {selectedTradeCard ? (
+              {selectedOfferedCard ? (
                 <PokeCard
-                  key={selectedTradeCard.id}
-                  card={selectedTradeCard}
-                  handleCardClick={handleTradeClick}
+                  key={selectedOfferedCard.id}
+                  card={selectedOfferedCard}
+                  handleCardClick={handleOfferClick}
                 />
               ) : (
                 filteredCards.map(
                   (card: PokemonCard) =>
-                    card !== selectedCard && (
+                    card !== selectedWantedCard && (
                       <PokeCard
                         key={card.id}
                         card={card}
-                        handleCardClick={handleTradeClick}
+                        handleCardClick={handleOfferClick}
                       />
                     ),
                 )
@@ -123,9 +151,19 @@ export default function PTCGPTrade() {
           </div>
         </div>
         <div className="ptcgp-trade_submit-button-container">
-          {selectedCard && selectedTradeCard && <SubmitButtons />}
+          {selectedOfferedCard && selectedWantedCard && (
+            <SubmitButtons
+              selectedCard={selectedOfferedCard}
+              selectedWantedCard={selectedWantedCard}
+            />
+          )}
         </div>
       </div>
+      <ResultPopup
+        open={openResultPopup}
+        handleClose={() => setResultPopup(false)}
+        users={users}
+      />
     </div>
   );
 }
