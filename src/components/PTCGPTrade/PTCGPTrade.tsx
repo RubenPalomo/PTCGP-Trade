@@ -74,12 +74,12 @@ export default function PTCGPWanted() {
     <div>
       <h1 className="ptcgp-trade-title">Pokemon TCG Pocket Cards Trade</h1>
       <div className="ptcgp-trade_pokemon-card-container">
-        <div>
+        <div className="ptcgp-trade_rarity-select">
           <label htmlFor="rarity-select">Filter by rarity: </label>
           <select
             id="rarity-select"
             value={selectedRarity}
-            style={{ minWidth: "135px" }}
+            style={{ minWidth: "135px", marginLeft: "8px" }}
             onChange={handleChangeRarity}
           >
             <option value="">All</option>
