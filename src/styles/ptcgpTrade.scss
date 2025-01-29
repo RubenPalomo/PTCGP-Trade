@@ -1,0 +1,58 @@
+.ptcgp-trade {
+  &-title {
+    width: 100%;
+    text-align: center;
+    font-size: 250%;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+  }
+
+  &_pokemon-card-container {
+    display: flex;
+    flex-direction: column;
+    margin: 2%;
+  }
+
+  &_card-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-top: 50px;
+  }
+
+  &_submit-button-container {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+  }
+
+  &_submit-button {
+    width: 500px;
+    margin: 10px;
+  }
+}
+
+.poke-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin: 8px;
+  padding: 10px;
+  width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  max-height: 250px;
+
+  &-image {
+    width: 100%;
+    border-radius: 8px;
+  }
+}
