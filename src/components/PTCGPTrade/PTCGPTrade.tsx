@@ -72,7 +72,7 @@ export default function PTCGPWanted() {
 
   return (
     <div>
-      <h1 className="ptcgp-trade-title">Pokemon TCG Pocket Cards Wanted</h1>
+      <h1 className="ptcgp-trade-title">Pokemon TCG Pocket Cards Trade</h1>
       <div className="ptcgp-trade_pokemon-card-container">
         <div>
           <label htmlFor="rarity-select">Filter by rarity: </label>
@@ -93,7 +93,7 @@ export default function PTCGPWanted() {
         {!(selectedWantedCard && selectedOfferedCard) && (
           <p className="ptcgp-trade-subtitle">
             {selectedWantedCard
-              ? "Select a card to offer"
+              ? "Select a card to offer or view all offers"
               : "Select the card you want"}
           </p>
         )}
